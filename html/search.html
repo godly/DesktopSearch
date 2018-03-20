@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"> 
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>ElasticLunr Search</title>
+	</head>
+	<body>
+		<input type="text" id="searchData" placeholder="Initializing" readonly></input>
+		<input id="maxResults" type="range" value="50" min="10" max="200" step="10" title="Show max. 50 results" style="width: 50px"/>
+		<span id="searchCount"></span>
+		<div id="searchResult"></div>
+	</body>
+	<!--
+		``elasticlunr.min.js´´ loads the search engine.
+	-->
+	<script src="_search/elasticlunr.min.js" type="text/javascript" charset="UTF-8"></script>
+	<!--
+		``stopwords.js´´ must contain ``var importStopWords="foo,bar,...";´´.
+		Stop words are separated with comma ``,´´ and inclosed in double quotes ``"´´ to be IE 11 compatible.
+	-->
+	<script src="_search/stopwords.js" type="text/javascript" charset="UTF-8"></script>
+	<!--
+		``elasticlunr.min.js´´ loads the custom adjustments and imports the stop words. 
+	-->
+	<script src="_search/search.js" type="text/javascript" charset="UTF-8"></script>
+	<!--
+		``filelist.js´´ must contain ``index.addDoc({"id":"_n_","metaData":"_metaData_","fileName":"_fileName_"});´´ for each element.
+		_n_: Increasing element ID (1, 2, ...)
+		_metaData_: Metadata for the file (may be the same as the file name). Search will query this metadata.
+		_fileName_: The file name including path, will be used as the HTML link.
+		Escape double quotes properly or do not index these files!
+		The last command should be ``indexSize = _n_;´´ with _n_ matching the number of documents.
+	-->
+	<script src="_search/filelist.js" type="text/javascript" charset="UTF-8"></script>
+	<!-- Enable search (user input) as soon as all files are loaded. -->
+	<script type="text/javascript" charset="UTF-8">
+		elSearch.placeholder="Search ...";
+		elSearch.readOnly = false;
+		console.log(indexSize + " elements in index.");
+	</script>
+</html>
