@@ -50,12 +50,16 @@ function doSearch() {
 	var queryTerm = elSearch.value;
 	
 	var expandQuery = false;
-	if (queryTerm.includes("*")) {
+	if (queryTerm.indexOf('*') >= 0) {
 		expandQuery = true;
 	}
+	var combineQuery = "AND";
+	if (queryTerm.indexOf('|') >= 0) {
+		combineQuery = "OR";
+	}
 	
-	// All terms must match and if "*" is used the query term is expanded (wildcard-search like) 
-	var searchResult = index.search(queryTerm, { fields: { metaData: { bool: "AND", expand: expandQuery }}});
+	// All terms in the query string must match. If '|' is used only one search term has to match. If '*' is used the query term is expanded (wildcard-search like).
+	var searchResult = index.search(queryTerm, { fields: { metaData: { bool: combineQuery, expand: expandQuery }}});
 	var tSearchEnd = new Date();
 
 	var resultCount = searchResult.length;
@@ -71,6 +75,7 @@ function doSearch() {
 		} else {
 		hrefProtocol = fileProtocol1;
 		}
+		resultString = resultString + '<a target="sTarget" href="' + hrefProtocol + qFileName.replace(/\/[^\/]*$/ig, "") + '">...</a> ';
 		resultString = resultString + '<a target="sTarget" href="' + hrefProtocol + qFileName + '">' + qFileName + "</a> (" + parseFloat(qScore).toFixed(2) + ")<br/>";
 		if (i == showMaxResults) {
 			// show only 'showMaxResults' results
