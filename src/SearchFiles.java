@@ -131,7 +131,11 @@ public class SearchFiles {
 	}
 
 	private final void walk(final String path) {
-		File[] list = new File(path).listFiles();
+		if (docId == resultLimit) {
+			System.out.println("WARNING\tSkipping files (index limit reached)!");
+			// exit recursive / inner walk()
+			return;
+		}		File[] list = new File(path).listFiles();
 		if (list == null) {
 			return;
 		}
@@ -180,7 +184,8 @@ public class SearchFiles {
 				// 1st replaceAll: Separate file type from file name with space.
 				// 2nd replaceAll: Separate words with spaces. Using the default metaDataSeperator 'A.B. C' remains 'A.B. C'.
 				// 3nd replaceAll: Remove duplicate space characters.
-				String metaData = relFileName.replaceAll("^(.*)\\.([a-z0-9]*)$", "$1 $2").replaceAll(metaDataSeperator, " ").replaceAll("  *", " ");
+				// 4th replaceAll: Replace '. ' with ' '
+				String metaData = relFileName.replaceAll("^(.*)\\.([a-z0-9]*)$", "$1 $2").replaceAll(metaDataSeperator, " ").replaceAll("  *", " ").replaceAll("\\. ", " ");
 				if (transliterationInstance != null) {
 					metaData = dedupString(metaData + " " + transliterationInstance.transform(metaData));
 				}
